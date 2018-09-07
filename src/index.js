@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 
-  const imageId = 1 //Enter your assigned imageId here
+  const imageId = 113
 
   const imageURL = `https://randopic.herokuapp.com/images/${imageId}`
 
@@ -8,7 +8,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const commentsURL = `https://randopic.herokuapp.com/comments/`
 
+  function fetchData() {
+    fetch(`https://randopic.herokuapp.com/images/${imageId}`)
+      .then(res => res.json())
+      .then(addPics)
+  }
 
+  function addPics(pics){
+    pics.forEach(addPic)
+  }
 
+  function addPic(pic){
+    entry.innerHTML = `
+    ${pic.name}
+    ${pic.like_count}
+    ${pic.comment}
+  `
+  }
+
+ fetchData()
 })
+
+
+
+
 
