@@ -27,7 +27,7 @@ function renderImage(img){
   let renderedImage = document.querySelector('#image')
   imageCard.innerHTML +=
   `<div>
-      <img src=${imageURL}id="image" data-id/>
+      <img src="${img.url}" id="image" data-id/>
       <h4 id="name">${imageName}</h4>
 
 </div>`
