@@ -1,14 +1,69 @@
-document.addEventListener('DOMContentLoaded', function() {
+// URLS
+const imageId = 180; //Enter your assigned imageId here
+const imageURL = `https://randopic.herokuapp.com/images/${imageId}`;
+const likeURL = `https://randopic.herokuapp.com/likes/`;
+const commentsURL = `https://randopic.herokuapp.com/comments/`;
 
-  const imageId = 1 //Enter your assigned imageId here
+// UI Elements
+const UIimage = document.querySelector("#image");
+const UIheading = document.querySelector("#name");
+const UIlikeCount = document.querySelector("#likes");
+const UIcomments = document.querySelector("#comments");
+const UIlikeBtn = document.querySelector("#like_button");
+const commentForm = document.querySelector("#comment_form");
+const commentInput = document.querySelector("#comment_input");
 
-  const imageURL = `https://randopic.herokuapp.com/images/${imageId}`
+// Event Listeners
+document.addEventListener("DOMContentLoaded", getImageData);
+UIlikeBtn.addEventListener("click", addLike);
+commentForm.addEventListener("submit", addComment);
 
-  const likeURL = `https://randopic.herokuapp.com/likes/`
+function getImageData() {
+	fetch(imageURL)
+		.then(response => response.json())
+		.then(imageData => displayImageData(imageData));
+}
 
-  const commentsURL = `https://randopic.herokuapp.com/comments/`
+function displayImageData(imageData) {
+	UIimage.src = imageData.url;
+	UIheading.innerText = imageData.name;
+	UIlikeCount.innerText = imageData.like_count;
+	UIcomments.append(renderCommentsHTML(imageData));
+}
 
+function renderCommentsHTML(imageData) {
+	let commentLi = document.createElement("li");
 
+	imageData.comments.forEach(
+		comment => (commentLi.innerText = `${comment.content}`)
+	);
+	return commentLi;
+}
 
-})
+function addLike(imageData) {
+	let likes = parseInt(UIlikeCount.innerText);
+	likes++;
+	UIlikeCount.innerText = String(likes);
+	updateLikes(imageData);
+}
 
+function updateLikes(imageData) {
+	fetch("https://randopic.herokuapp.com/likes", {
+		method: "POST",
+		headers: {
+			"Accept": "application/json",
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(imageData)
+	});
+}
+
+function addComment(e) {
+	e.preventDefault();
+	let commentLi = document.createElement("li");
+	commentLi.innerText = commentInput.value;
+	UIcomments.append(commentLi);
+	updateComments();
+}
+
+function updateComments() { }
