@@ -16,33 +16,6 @@ getImage()
 
 //likeButton.addEventListener('click', increaseLikes)
 
-
-
-function increaseLikes(e){
-	
-
-	let like = e.target.parentElement.children[2].innerText.split(' ')[1]
-
-	like = parseInt(like)+1
-
-		fetch(likeURL, {
-			method: "POST",
-			headers: {
-				'Accept': 'application/json',
-				"Content-Type": "application/json",
-				//"Access-Control-Allow-Origin: *"
-			},
-			body: JSON.stringify({
-				image_id: 102
-				
-			})
-
-		})//end of fetch
-	//debugger
-	e.target.parentElement.children[2].innerText = `Likes: ${like} `
-	//debugger
-}
-
  function getImage(){
  	fetch(imageURL)
  	.then(resp => resp.json())
@@ -50,7 +23,7 @@ function increaseLikes(e){
  }	
 
 
-function putImageOnPage(data){
+ function putImageOnPage(data){
 
 	console.log(imageField)
 
@@ -87,6 +60,34 @@ function putImageOnPage(data){
 
 }
 
+
+function increaseLikes(e){
+	
+
+	let like = e.target.parentElement.children[2].innerText.split(' ')[1]
+
+	like = parseInt(like)+1
+
+		fetch(likeURL, {
+			method: "POST",
+			headers: {
+				'Accept': 'application/json',
+				"Content-Type": "application/json",
+				//"Access-Control-Allow-Origin: *"
+			},
+			body: JSON.stringify({
+				image_id: imageId
+				
+			})
+
+		})//end of fetch
+	//debugger
+	e.target.parentElement.children[2].innerText = `Likes: ${like} `
+	//debugger
+}
+
+
+
 function addComment(e){
 	debugger
 	e.preventDefault()
@@ -104,7 +105,7 @@ function addComment(e){
 				//"Access-Control-Allow-Origin: *"
 			},
 			body: JSON.stringify({
-				image_id: 102,
+				image_id: imageId,
 				content: comment.value
 				
 			})
