@@ -55,9 +55,16 @@ getImage()
 
     likeButton.addEventListener('click', increaseLikes)
     commentForm.addEventListener('submit', addComment)
+    imageField.addEventListener('click', deleteDelegation)
 
    // debugger
 
+}
+
+function inputComments(data){
+	return data.comments.map(function(comment){
+		return `<li>${comment.content}<button class = "delete_comment" id = ${comment.id}>Delete</button></li>`
+	}).join('')
 }
 
 
@@ -89,12 +96,12 @@ function increaseLikes(e){
 
 
 function addComment(e){
-	debugger
+	//debugger
 	e.preventDefault()
 
 	let comment = document.querySelector("#comment_input")
 
-	e.target.parentElement.lastElementChild.innerHTML += `<li>${comment.value}</li>`
+	e.target.parentElement.lastElementChild.innerHTML += `<li>${comment.value}<button class = "delete_comment" id = ${comment.id}>Delete</button></li>`
 
 
 		fetch(commentsURL, {
@@ -115,10 +122,23 @@ function addComment(e){
 	comment.value = ''
 }
 
-function inputComments(data){
-	return data.comments.map(function(comment){
-		return `<li>${comment.content}</li>`
-	}).join('')
+
+
+function deleteDelegation(e){
+	let deleteComment = event.target.className === 'delete_comment'
+
+	if(deleteComment){
+		//debugger
+		let commentId = e.target.id
+		e.target.parentElement.remove()
+
+
+		fetch(commentsURL+`/${commentId}`, {
+			method: "DELETE"
+		})
+
+
+	}
 }
 
 
