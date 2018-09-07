@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return sendLikeToBackEnd();
     } else if (targetId === 'submit_button') {
       Image.addComment();
-      return sendLikeToBackEnd();
+      return sendCommentToBackEnd();
     }
   }
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function sendCommentToBackEnd() {
-    let content = image.comments[image.comments.length - 1];
+    let content = image.comments[image.comments.length - 1].content;
     fetch(commentsURL, {
       method: 'POST',
       headers: {
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         image_id: imageId,
         content: content
       })
-    }).then(resp => resp.json()).then(console.log)
+    }).then(resp => resp.json());
   }
 
   fetch(imageURL).then(resp => resp.json()).then(data => createElements(data));
