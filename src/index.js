@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
   fetchImage();
   likeFeature();
   commentFeature();
+  deleteFeature();
 })
 
 function fetchImage(){
@@ -39,7 +40,7 @@ function populateDom(info){
 function singleComment(comment){
 
   const commentsUL = document.getElementById("comments");
-  const li = `<li>${comment.content}</li>`
+  const li = `<li id=${comment.id}>${comment.content}<button class="delete">Delete</button></li>`
   commentsUL.innerHTML += li
 
 }
@@ -73,11 +74,6 @@ function commentFeature(){
     event.preventDefault();
     const commentInput = document.getElementById("comment_input");
     const comment = commentInput.value
-    const commentsUL = document.getElementById("comments");
-    const li = document.createElement("li");
-    li.innerText = comment;
-    commentsUL.append(li)
-    commentInput.value =""
 
     fetch(commentsURL, {
         method: "POST",
@@ -90,7 +86,23 @@ function commentFeature(){
            image_id: `${imageId}`,
            content: `${comment}`
         }),
-    })
+    }).then(fetchImage)
 
   })
+}
+
+function deleteFeature(){
+  const commentsUL = document.getElementById("comments");
+  commentsUL.addEventListener("click", function(event){
+
+    if(event.target.classList[0] ==="delete"){
+      const id = event.target.parentElement.id
+
+      fetch(commentsURL+`/${id}`, {
+          method: "DELETE"
+      }).then(fetchImage)
+
+    }
+  })
+
 }
